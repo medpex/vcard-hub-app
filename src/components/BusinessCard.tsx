@@ -31,7 +31,7 @@ export function BusinessCard({ data, variant = "display", className = "" }: Busi
   
   return (
     <Card className={`
-      ${isPreview ? "w-80 h-48" : "w-full max-w-md mx-auto"} 
+      ${isPreview ? "w-80 h-auto min-h-48" : "w-full max-w-md mx-auto min-h-64"} 
       relative overflow-hidden bg-white border-0 shadow-lg ${className}
     `}>
       {/* Header Section - Simplified gradient */}
@@ -46,68 +46,68 @@ export function BusinessCard({ data, variant = "display", className = "" }: Busi
           </Avatar>
           
           {/* Basic Info */}
-          <div className="flex-1 min-w-0">
-            <h2 className="text-lg sm:text-xl font-bold mb-1 truncate">{data.name}</h2>
-            <p className="text-white/90 text-sm mb-1 truncate">{data.position}</p>
-            <div className="flex items-center gap-1 text-white/80 text-xs sm:text-sm">
-              <Building2 className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+          <div className="flex-1 min-w-0 pr-2">
+            <h2 className="text-base sm:text-lg font-bold mb-1 truncate leading-tight">{data.name}</h2>
+            <p className="text-white/90 text-xs sm:text-sm mb-1 truncate leading-tight">{data.position}</p>
+            <div className="flex items-center gap-1 text-white/80 text-xs leading-tight">
+              <Building2 className="w-3 h-3 flex-shrink-0" />
               <span className="truncate">{data.company}</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Contact Information - Streamlined */}
-      <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
-        {/* Bio - Only on larger screens or if short */}
-        {data.bio && !isPreview && (
-          <p className="text-sm text-gray-600 leading-relaxed border-b pb-3 line-clamp-2">{data.bio}</p>
+      {/* Contact Information - Auto height */}
+      <div className="p-4 sm:p-6 space-y-2 sm:space-y-3">
+        {/* Bio - Only show if not preview and not too long */}
+        {data.bio && !isPreview && data.bio.length < 100 && (
+          <p className="text-xs sm:text-sm text-gray-600 leading-relaxed border-b pb-2 sm:pb-3 line-clamp-2">{data.bio}</p>
         )}
         
-        {/* Contact Grid - Icons only on mobile */}
-        <div className="grid grid-cols-1 gap-2 sm:gap-3">
+        {/* Contact Grid - Better spacing */}
+        <div className="space-y-2">
           {/* Email */}
           <a 
             href={`mailto:${data.email}`}
-            className="flex items-center gap-3 p-2 sm:p-3 rounded-lg hover:bg-gray-50 transition-colors group"
+            className="flex items-center gap-2 sm:gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors group w-full"
           >
-            <div className="w-8 h-8 bg-business-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-              <Mail className="w-4 h-4 text-business-primary" />
+            <div className="w-7 h-7 sm:w-8 sm:h-8 bg-business-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+              <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-business-primary" />
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs text-gray-500 uppercase tracking-wide hidden sm:block">E-Mail</p>
-              <p className="text-sm font-medium text-gray-900 truncate">{data.email}</p>
+            <div className="flex-1 min-w-0 overflow-hidden">
+              <p className="text-xs text-gray-500 uppercase tracking-wide hidden sm:block leading-tight">E-Mail</p>
+              <p className="text-xs sm:text-sm font-medium text-gray-900 truncate leading-tight">{data.email}</p>
             </div>
           </a>
 
           {/* Phone */}
           <a 
             href={`tel:${data.phone}`}
-            className="flex items-center gap-3 p-2 sm:p-3 rounded-lg hover:bg-gray-50 transition-colors group"
+            className="flex items-center gap-2 sm:gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors group w-full"
           >
-            <div className="w-8 h-8 bg-business-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-              <Phone className="w-4 h-4 text-business-primary" />
+            <div className="w-7 h-7 sm:w-8 sm:h-8 bg-business-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+              <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-business-primary" />
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs text-gray-500 uppercase tracking-wide hidden sm:block">Telefon</p>
-              <p className="text-sm font-medium text-gray-900">{data.phone}</p>
+            <div className="flex-1 min-w-0 overflow-hidden">
+              <p className="text-xs text-gray-500 uppercase tracking-wide hidden sm:block leading-tight">Telefon</p>
+              <p className="text-xs sm:text-sm font-medium text-gray-900 leading-tight">{data.phone}</p>
             </div>
           </a>
 
           {/* WhatsApp - Mobile priority */}
           {data.whatsapp && (
             <a 
-              href={`https://wa.me/${data.whatsapp.replace(/[^\d]/g, '')}`}
+              href={`https://wa.me/${data.whatsapp.replace(/[^\d]/g, "")}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 p-2 sm:p-3 rounded-lg hover:bg-gray-50 transition-colors group"
+              className="flex items-center gap-2 sm:gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors group w-full"
             >
-              <div className="w-8 h-8 bg-green-50 rounded-full flex items-center justify-center flex-shrink-0">
-                <MessageCircle className="w-4 h-4 text-green-600" />
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-green-50 rounded-full flex items-center justify-center flex-shrink-0">
+                <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-600" />
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs text-gray-500 uppercase tracking-wide hidden sm:block">WhatsApp</p>
-                <p className="text-sm font-medium text-gray-900">{data.whatsapp}</p>
+              <div className="flex-1 min-w-0 overflow-hidden">
+                <p className="text-xs text-gray-500 uppercase tracking-wide hidden sm:block leading-tight">WhatsApp</p>
+                <p className="text-xs sm:text-sm font-medium text-gray-900 leading-tight">{data.whatsapp}</p>
               </div>
             </a>
           )}
@@ -118,32 +118,32 @@ export function BusinessCard({ data, variant = "display", className = "" }: Busi
               href={`https://${data.website}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 p-2 sm:p-3 rounded-lg hover:bg-gray-50 transition-colors group"
+              className="flex items-center gap-2 sm:gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors group w-full"
             >
-              <div className="w-8 h-8 bg-business-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                <Globe className="w-4 h-4 text-business-primary" />
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-business-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                <Globe className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-business-primary" />
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs text-gray-500 uppercase tracking-wide hidden sm:block">Website</p>
-                <p className="text-sm font-medium text-gray-900 truncate">{data.website}</p>
+              <div className="flex-1 min-w-0 overflow-hidden">
+                <p className="text-xs text-gray-500 uppercase tracking-wide hidden sm:block leading-tight">Website</p>
+                <p className="text-xs sm:text-sm font-medium text-gray-900 truncate leading-tight">{data.website}</p>
               </div>
             </a>
           )}
         </div>
 
-        {/* Footer - Social & Location */}
-        <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+        {/* Footer - Social & Location - Better spacing */}
+        <div className="flex items-center justify-between pt-2 sm:pt-3 border-t border-gray-100 mt-3">
           {/* Social Media Icons */}
-          <div className="flex gap-2">
+          <div className="flex gap-1.5 sm:gap-2">
             {data.linkedin && (
               <a 
                 href={`https://${data.linkedin}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 bg-business-primary/10 rounded-full flex items-center justify-center hover:bg-business-primary/20 transition-colors"
+                className="w-7 h-7 sm:w-8 sm:h-8 bg-business-primary/10 rounded-full flex items-center justify-center hover:bg-business-primary/20 transition-colors"
                 aria-label="LinkedIn"
               >
-                <Linkedin className="w-4 h-4 text-business-primary" />
+                <Linkedin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-business-primary" />
               </a>
             )}
             
@@ -152,18 +152,18 @@ export function BusinessCard({ data, variant = "display", className = "" }: Busi
                 href={`https://instagram.com/${data.instagram}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 bg-pink-50 rounded-full flex items-center justify-center hover:bg-pink-100 transition-colors"
+                className="w-7 h-7 sm:w-8 sm:h-8 bg-pink-50 rounded-full flex items-center justify-center hover:bg-pink-100 transition-colors"
                 aria-label="Instagram"
               >
-                <Instagram className="w-4 h-4 text-pink-600" />
+                <Instagram className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-pink-600" />
               </a>
             )}
           </div>
           
-          {/* Location Badge */}
-          <div className="flex items-center gap-1 text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded-full">
+          {/* Location Badge - Smaller and more contained */}
+          <div className="flex items-center gap-1 text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded-full max-w-32 sm:max-w-none">
             <MapPin className="w-3 h-3 flex-shrink-0" />
-            <span className="truncate max-w-24 sm:max-w-32">{data.address.split(',')[0]}</span>
+            <span className="truncate text-xs leading-tight">{data.address.split(",")[0]}</span>
           </div>
         </div>
       </div>

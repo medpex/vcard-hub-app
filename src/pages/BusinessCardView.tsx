@@ -83,9 +83,11 @@ END:VCARD`;
     <div className="min-h-screen bg-gradient-to-br from-business-secondary via-background to-business-secondary/50">
       <div className="container mx-auto px-4 py-6 sm:py-8">
         <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
-          {/* Main Business Card Display */}
-          <div className="flex justify-center px-4">
-            <BusinessCard data={mockCardData} />
+          {/* Main Business Card Display - Better container */}
+          <div className="flex justify-center px-2 sm:px-4">
+            <div className="w-full max-w-sm">
+              <BusinessCard data={mockCardData} />
+            </div>
           </div>
 
           {/* Action Buttons */}
