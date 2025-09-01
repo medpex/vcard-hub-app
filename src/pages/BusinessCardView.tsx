@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Download, Share2, Phone, Mail, MapPin, Globe, Linkedin } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-// Mock data - would come from database in real app
+// Mock data - enhanced with additional fields
 const mockCardData = {
   id: "1",
   name: "Max Mustermann",
@@ -13,9 +13,13 @@ const mockCardData = {
   company: "Stadtwerke Geesthacht",
   email: "max.mustermann@stadtwerke-geesthacht.de",
   phone: "+49 4152 123456",
+  whatsapp: "+49 152 987654321",
   address: "Bergedorfer Straße 2, 21502 Geesthacht",
   website: "www.stadtwerke-geesthacht.de",
-  linkedin: "linkedin.com/in/max-mustermann"
+  linkedin: "linkedin.com/in/max-mustermann",
+  instagram: "maxmustermann_official",
+  bio: "Leidenschaftlicher Führungskraft mit über 15 Jahren Erfahrung in der Energiebranche. Fokus auf nachhaltige Energielösungen und Kundenzufriedenheit.",
+  avatar: "/lovable-uploads/c2132334-c633-4c02-af9f-2f9aa45da5dd.png"
 };
 
 export default function BusinessCardView() {
@@ -31,8 +35,10 @@ ORG:${mockCardData.company}
 TITLE:${mockCardData.position}
 EMAIL:${mockCardData.email}
 TEL:${mockCardData.phone}
+TEL;TYPE=cell:${mockCardData.whatsapp}
 ADR:;;${mockCardData.address};;;;
 URL:${mockCardData.website}
+NOTE:${mockCardData.bio}
 END:VCARD`;
 
     // Create and download vCard file

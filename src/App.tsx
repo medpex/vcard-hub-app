@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import Dashboard from "./pages/Dashboard";
+import CardEditor from "./pages/CardEditor";
 import QRCodes from "./pages/QRCodes";
 import BusinessCardView from "./pages/BusinessCardView";
 import NotFound from "./pages/NotFound";
@@ -20,7 +21,7 @@ const App = () => (
         <Routes>
           {/* Admin Dashboard Routes */}
           <Route path="/" element={<Layout><Dashboard /></Layout>} />
-          <Route path="/cards" element={<Layout><Dashboard /></Layout>} />
+          <Route path="/cards" element={<Layout><CardEditor /></Layout>} />
           <Route path="/qr-codes" element={<Layout><QRCodes /></Layout>} />
           <Route path="/employees" element={<Layout><Dashboard /></Layout>} />
           <Route path="/settings" element={<Layout><Dashboard /></Layout>} />
