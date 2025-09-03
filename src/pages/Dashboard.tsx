@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { BusinessCard } from "@/components/BusinessCard";
 import { Plus, Users, CreditCard, QrCode, TrendingUp } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 // Mock data for demonstration
 const mockCards = [
@@ -59,6 +60,24 @@ const stats = [
 ];
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+
+  const handleNewCard = () => {
+    navigate('/cards');
+  };
+
+  const handleEditCard = (cardId: string) => {
+    navigate('/cards');
+  };
+
+  const handleGenerateQR = () => {
+    navigate('/qr-codes');
+  };
+
+  const handleAddEmployee = () => {
+    navigate('/employees');
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -69,7 +88,7 @@ export default function Dashboard() {
             Übersicht über Ihre digitalen Visitenkarten
           </p>
         </div>
-        <Button className="gap-2">
+        <Button className="gap-2" onClick={handleNewCard}>
           <Plus className="w-4 h-4" />
           Neue Visitenkarte
         </Button>
@@ -116,7 +135,7 @@ export default function Dashboard() {
                     <p className="text-sm text-muted-foreground">{card.position}</p>
                     <p className="text-sm text-muted-foreground">{card.company}</p>
                   </div>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={() => handleEditCard(card.id)}>
                     Bearbeiten
                   </Button>
                 </div>
@@ -151,15 +170,15 @@ export default function Dashboard() {
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-3">
-            <Button variant="outline" className="h-20 flex flex-col gap-2">
+            <Button variant="outline" className="h-20 flex flex-col gap-2" onClick={handleNewCard}>
               <Plus className="w-6 h-6" />
               <span>Neue Visitenkarte erstellen</span>
             </Button>
-            <Button variant="outline" className="h-20 flex flex-col gap-2">
+            <Button variant="outline" className="h-20 flex flex-col gap-2" onClick={handleGenerateQR}>
               <QrCode className="w-6 h-6" />
               <span>QR-Code generieren</span>
             </Button>
-            <Button variant="outline" className="h-20 flex flex-col gap-2">
+            <Button variant="outline" className="h-20 flex flex-col gap-2" onClick={handleAddEmployee}>
               <Users className="w-6 h-6" />
               <span>Mitarbeiter hinzufügen</span>
             </Button>
