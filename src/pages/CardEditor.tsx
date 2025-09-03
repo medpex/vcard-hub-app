@@ -7,6 +7,7 @@ import { BusinessCard } from "@/components/BusinessCard";
 import { Save, Eye, Plus, Upload } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 // Mock data for form
 const initialFormData = {
@@ -29,6 +30,7 @@ export default function CardEditor() {
   const [formData, setFormData] = useState(initialFormData);
   const [showPreview, setShowPreview] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
@@ -51,6 +53,16 @@ export default function CardEditor() {
       title: "Datei hochgeladen",
       description: "Das Bild wurde erfolgreich hochgeladen.",
     });
+  };
+
+  const handlePublicView = () => {
+    console.log('Navigating to public view');
+    navigate('/card/demo');
+  };
+
+  const handleGenerateQR = () => {
+    console.log('Navigating to QR codes');
+    navigate('/qr-codes');
   };
 
   return (
@@ -271,11 +283,11 @@ export default function CardEditor() {
               <CardTitle>Aktionen</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <Button variant="outline" className="w-full gap-2">
+              <Button variant="outline" className="w-full gap-2" onClick={handlePublicView}>
                 <Eye className="w-4 h-4" />
                 Öffentliche Ansicht
               </Button>
-              <Button variant="outline" className="w-full gap-2">
+              <Button variant="outline" className="w-full gap-2" onClick={handleGenerateQR}>
                 <Plus className="w-4 h-4" />
                 QR-Code generieren
               </Button>
