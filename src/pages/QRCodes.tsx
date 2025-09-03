@@ -2,13 +2,40 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { QRCodeGenerator } from "@/components/QRCodeGenerator";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Download, Eye, MoreHorizontal } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Download, Eye, MoreHorizontal, User } from "lucide-react";
+import { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+// Mock data for business cards
+const businessCards = [
+  {
+    id: "1",
+    name: "Max Mustermann",
+    position: "Geschäftsführer",
+    company: "Stadtwerke Geesthacht",
+    email: "max.mustermann@stadtwerke-geesthacht.de"
+  },
+  {
+    id: "2", 
+    name: "Anna Schmidt",
+    position: "Marketing Leiterin",
+    company: "Schmidt & Partner",
+    email: "a.schmidt@schmidt-partner.de"
+  },
+  {
+    id: "3",
+    name: "Peter Weber", 
+    position: "Vertriebsleiter",
+    company: "Weber Solutions",
+    email: "p.weber@weber-solutions.de"
+  }
+];
 
 // Mock data for existing QR codes
 const existingQRCodes = [
@@ -42,6 +69,9 @@ const existingQRCodes = [
 ];
 
 export default function QRCodes() {
+  const [selectedCardId, setSelectedCardId] = useState<string>("");
+  const selectedCard = businessCards.find(card => card.id === selectedCardId);
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -56,7 +86,55 @@ export default function QRCodes() {
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* QR Code Generator */}
-        <QRCodeGenerator businessCardId="demo" />
+        <div className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Visitenkarte auswählen</CardTitle>
+              <CardDescription>
+                Wählen Sie eine Visitenkarte für den QR-Code aus
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Select value={selectedCardId} onValueChange={setSelectedCardId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Visitenkarte auswählen..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {businessCards.map((card) => (
+                    <SelectItem key={card.id} value={card.id}>
+                      <div className="flex items-center gap-2">
+                        <User className="w-4 h-4" />
+                        <div>
+                          <div className="font-medium">{card.name}</div>
+                          <div className="text-xs text-muted-foreground">{card.position} - {card.company}</div>
+                        </div>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              
+              {selectedCard && (
+                <div className="mt-3 p-3 bg-muted/30 rounded-lg">
+                  <div className="text-sm">
+                    <div className="font-medium">{selectedCard.name}</div>
+                    <div className="text-muted-foreground">{selectedCard.position}</div>
+                    <div className="text-muted-foreground">{selectedCard.company}</div>
+                    <div className="text-muted-foreground">{selectedCard.email}</div>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+          
+          {selectedCardId && (
+            <QRCodeGenerator 
+              businessCardId={selectedCardId} 
+              contactName={selectedCard?.name}
+              contactInfo={`${selectedCard?.position} - ${selectedCard?.company}`}
+            />
+          )}
+        </div>
 
         {/* Stats Card */}
         <Card>
