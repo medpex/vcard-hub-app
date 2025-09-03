@@ -63,6 +63,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   const handleNewCard = () => {
+    console.log('Button clicked - navigating to cards');
     navigate('/cards');
   };
 
