@@ -12,61 +12,25 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-// Mock data for business cards
-const businessCards = [
-  {
-    id: "1",
-    name: "Max Mustermann",
-    position: "Geschäftsführer",
-    company: "Stadtwerke Geesthacht",
-    email: "max.mustermann@stadtwerke-geesthacht.de"
-  },
-  {
-    id: "2", 
-    name: "Anna Schmidt",
-    position: "Marketing Leiterin",
-    company: "Schmidt & Partner",
-    email: "a.schmidt@schmidt-partner.de"
-  },
-  {
-    id: "3",
-    name: "Peter Weber", 
-    position: "Vertriebsleiter",
-    company: "Weber Solutions",
-    email: "p.weber@weber-solutions.de"
-  }
-];
+// Empty data arrays - users can add their own data
+const businessCards: Array<{
+  id: string;
+  name: string;
+  position: string;
+  company: string;
+  email: string;
+}> = [];
 
-// Mock data for existing QR codes
-const existingQRCodes = [
-  {
-    id: "1",
-    name: "Max Mustermann",
-    position: "Geschäftsführer",
-    company: "Stadtwerke Geesthacht",
-    scans: 42,
-    lastScan: "Vor 2 Stunden",
-    status: "active"
-  },
-  {
-    id: "2",
-    name: "Anna Schmidt",
-    position: "Marketing Leiterin",
-    company: "Schmidt & Partner",
-    scans: 28,
-    lastScan: "Gestern",
-    status: "active"
-  },
-  {
-    id: "3",
-    name: "Peter Weber",
-    position: "Vertriebsleiter",
-    company: "Weber Solutions",
-    scans: 156,
-    lastScan: "Vor 5 Minuten",
-    status: "active"
-  }
-];
+// Empty array for existing QR codes
+const existingQRCodes: Array<{
+  id: string;
+  name: string;
+  position: string;
+  company: string;
+  scans: number;
+  lastScan: string;
+  status: string;
+}> = [];
 
 export default function QRCodes() {
   const [selectedCardId, setSelectedCardId] = useState<string>("");
@@ -100,17 +64,23 @@ export default function QRCodes() {
                   <SelectValue placeholder="Visitenkarte auswählen..." />
                 </SelectTrigger>
                 <SelectContent>
-                  {businessCards.map((card) => (
-                    <SelectItem key={card.id} value={card.id}>
-                      <div className="flex items-center gap-2">
-                        <User className="w-4 h-4" />
-                        <div>
-                          <div className="font-medium">{card.name}</div>
-                          <div className="text-xs text-muted-foreground">{card.position} - {card.company}</div>
+                  {businessCards.length === 0 ? (
+                    <div className="p-2 text-sm text-muted-foreground text-center">
+                      Keine Visitenkarten vorhanden. Erstellen Sie zuerst eine Visitenkarte.
+                    </div>
+                  ) : (
+                    businessCards.map((card) => (
+                      <SelectItem key={card.id} value={card.id}>
+                        <div className="flex items-center gap-2">
+                          <User className="w-4 h-4" />
+                          <div>
+                            <div className="font-medium">{card.name}</div>
+                            <div className="text-xs text-muted-foreground">{card.position} - {card.company}</div>
+                          </div>
                         </div>
-                      </div>
-                    </SelectItem>
-                  ))}
+                      </SelectItem>
+                    ))
+                  )}
                 </SelectContent>
               </Select>
               
@@ -146,7 +116,7 @@ export default function QRCodes() {
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <span className="text-sm font-medium">Gesamt Scans heute</span>
-                <span className="text-2xl font-bold text-business-primary">127</span>
+                <span className="text-2xl font-bold text-business-primary">0</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm font-medium">Aktive QR-Codes</span>
@@ -154,7 +124,7 @@ export default function QRCodes() {
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm font-medium">Durchschnitt/Tag</span>
-                <span className="text-2xl font-bold">89</span>
+                <span className="text-2xl font-bold">0</span>
               </div>
             </div>
           </CardContent>
@@ -171,48 +141,55 @@ export default function QRCodes() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {existingQRCodes.map((qrCode) => (
-              <div key={qrCode.id} className="flex items-center justify-between p-4 border rounded-lg">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3">
-                    <div>
-                      <h4 className="font-medium">{qrCode.name}</h4>
-                      <p className="text-sm text-muted-foreground">{qrCode.position}</p>
-                      <p className="text-sm text-muted-foreground">{qrCode.company}</p>
+            {existingQRCodes.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                <p>Noch keine QR-Codes generiert.</p>
+                <p className="text-sm mt-1">Wählen Sie eine Visitenkarte aus und generieren Sie Ihren ersten QR-Code.</p>
+              </div>
+            ) : (
+              existingQRCodes.map((qrCode) => (
+                <div key={qrCode.id} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3">
+                      <div>
+                        <h4 className="font-medium">{qrCode.name}</h4>
+                        <p className="text-sm text-muted-foreground">{qrCode.position}</p>
+                        <p className="text-sm text-muted-foreground">{qrCode.company}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-                
-                <div className="flex items-center gap-4">
-                  <div className="text-right">
-                    <p className="text-sm font-medium">{qrCode.scans} Scans</p>
-                    <p className="text-xs text-muted-foreground">{qrCode.lastScan}</p>
+                  
+                  <div className="flex items-center gap-4">
+                    <div className="text-right">
+                      <p className="text-sm font-medium">{qrCode.scans} Scans</p>
+                      <p className="text-xs text-muted-foreground">{qrCode.lastScan}</p>
+                    </div>
+                    
+                    <Badge variant={qrCode.status === 'active' ? 'default' : 'secondary'}>
+                      {qrCode.status === 'active' ? 'Aktiv' : 'Inaktiv'}
+                    </Badge>
+                    
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="sm">
+                          <MoreHorizontal className="w-4 h-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem>
+                          <Eye className="w-4 h-4 mr-2" />
+                          Ansehen
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Download className="w-4 h-4 mr-2" />
+                          Herunterladen
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
-                  
-                  <Badge variant={qrCode.status === 'active' ? 'default' : 'secondary'}>
-                    {qrCode.status === 'active' ? 'Aktiv' : 'Inaktiv'}
-                  </Badge>
-                  
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="sm">
-                        <MoreHorizontal className="w-4 h-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem>
-                        <Eye className="w-4 h-4 mr-2" />
-                        Ansehen
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <Download className="w-4 h-4 mr-2" />
-                        Herunterladen
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </CardContent>
       </Card>
