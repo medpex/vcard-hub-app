@@ -129,9 +129,7 @@ export default function QRCodes() {
           
           {selectedCardId && (
             <QRCodeGenerator 
-              businessCardId={selectedCardId} 
-              contactName={selectedCard?.name}
-              contactInfo={`${selectedCard?.position} - ${selectedCard?.company}`}
+              businessCardId={selectedCardId}
             />
           )}
         </div>

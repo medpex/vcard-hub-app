@@ -9,19 +9,19 @@ import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 
-// Mock data for form
+// Empty form data - users can fill in their own information
 const initialFormData = {
-  name: "Max Mustermann",
-  position: "Geschäftsführer",
-  company: "Stadtwerke Geesthacht",
-  email: "max.mustermann@stadtwerke-geesthacht.de",
-  phone: "+49 4152 123456",
-  whatsapp: "+49 152 987654321",
-  address: "Bergedorfer Straße 2, 21502 Geesthacht",
-  website: "www.stadtwerke-geesthacht.de",
-  linkedin: "linkedin.com/in/max-mustermann",
-  instagram: "maxmustermann_official",
-  bio: "Leidenschaftlicher Führungskraft mit über 15 Jahren Erfahrung in der Energiebranche.",
+  name: "",
+  position: "",
+  company: "",
+  email: "",
+  phone: "",
+  whatsapp: "",
+  address: "",
+  website: "",
+  linkedin: "",
+  instagram: "",
+  bio: "",
   avatar: "",
   companyLogo: ""
 };

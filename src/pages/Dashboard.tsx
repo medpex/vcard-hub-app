@@ -4,58 +4,37 @@ import { BusinessCard } from "@/components/BusinessCard";
 import { Plus, Users, CreditCard, QrCode, TrendingUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-// Mock data for demonstration
-const mockCards = [
-  {
-    id: "1",
-    name: "Max Mustermann",
-    position: "Geschäftsführer",
-    company: "Muster GmbH",
-    email: "max.mustermann@muster.de",
-    phone: "+49 123 456789",
-    address: "Musterstraße 123, 21502 Geesthacht",
-    website: "www.muster.de"
-  },
-  {
-    id: "2", 
-    name: "Anna Schmidt",
-    position: "Marketing Leiterin",
-    company: "Schmidt & Partner",
-    email: "a.schmidt@schmidt-partner.de",
-    phone: "+49 123 987654",
-    address: "Hauptstraße 45, 21502 Geesthacht",
-    linkedin: "linkedin.com/in/anna-schmidt"
-  }
-];
+// Empty data - users can add their own
+const mockCards: any[] = [];
 
 const stats = [
   {
     title: "Aktive Visitenkarten",
-    value: "12",
+    value: "0",
     description: "Derzeit veröffentlicht",
     icon: CreditCard,
-    change: "+2 diese Woche"
+    change: "Noch keine erstellt"
   },
   {
     title: "QR-Code Scans",
-    value: "248",
+    value: "0",
     description: "Letzten 30 Tage",
     icon: QrCode,
-    change: "+15% zum Vormonat"
+    change: "Noch keine Scans"
   },
   {
     title: "Mitarbeiter",
-    value: "8",
+    value: "0",
     description: "Registrierte Nutzer",
     icon: Users,
-    change: "+1 diese Woche"
+    change: "Noch keine hinzugefügt"
   },
   {
     title: "Seitenaufrufe",
-    value: "1.2k",
+    value: "0",
     description: "Letzten 30 Tage", 
     icon: TrendingUp,
-    change: "+23% zum Vormonat"
+    change: "Noch keine Aufrufe"
   }
 ];
 
@@ -129,18 +108,26 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {mockCards.map((card) => (
-                <div key={card.id} className="flex items-center justify-between p-3 border rounded-lg">
-                  <div>
-                    <h4 className="font-medium">{card.name}</h4>
-                    <p className="text-sm text-muted-foreground">{card.position}</p>
-                    <p className="text-sm text-muted-foreground">{card.company}</p>
-                  </div>
-                  <Button variant="outline" size="sm" onClick={() => handleEditCard(card.id)}>
-                    Bearbeiten
-                  </Button>
+              {mockCards.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  <CreditCard className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                  <p>Noch keine Visitenkarten erstellt</p>
+                  <p className="text-sm">Klicken Sie auf "Neue Visitenkarte" um zu beginnen</p>
                 </div>
-              ))}
+              ) : (
+                mockCards.map((card) => (
+                  <div key={card.id} className="flex items-center justify-between p-3 border rounded-lg">
+                    <div>
+                      <h4 className="font-medium">{card.name}</h4>
+                      <p className="text-sm text-muted-foreground">{card.position}</p>
+                      <p className="text-sm text-muted-foreground">{card.company}</p>
+                    </div>
+                    <Button variant="outline" size="sm" onClick={() => handleEditCard(card.id)}>
+                      Bearbeiten
+                    </Button>
+                  </div>
+                ))
+              )}
             </div>
           </CardContent>
         </Card>
@@ -153,10 +140,17 @@ export default function Dashboard() {
             </CardDescription>
           </CardHeader>
           <CardContent className="flex justify-center">
-            <BusinessCard 
-              data={mockCards[0]} 
-              variant="preview"
-            />
+            {mockCards.length > 0 ? (
+              <BusinessCard 
+                data={mockCards[0]} 
+                variant="preview"
+              />
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                <CreditCard className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                <p>Erstellen Sie zuerst eine Visitenkarte</p>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
