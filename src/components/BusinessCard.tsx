@@ -140,43 +140,57 @@ export function BusinessCard({ data, variant = "display", className = "" }: Busi
               </div>
             </a>
           )}
+
+          {/* Address with Google Maps */}
+          {data.address && (
+            <a 
+              href={`https://maps.google.com/?q=${encodeURIComponent(data.address)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 sm:gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors group w-full"
+            >
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-business-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-business-primary" />
+              </div>
+              <div className="flex-1 min-w-0 overflow-hidden">
+                <p className="text-xs text-gray-500 uppercase tracking-wide hidden sm:block leading-tight">Standort</p>
+                <p className="text-xs sm:text-sm font-medium text-gray-900 truncate leading-tight">{data.address}</p>
+              </div>
+            </a>
+          )}
         </div>
 
-        {/* Footer - Social & Location - Better spacing */}
-        <div className="flex items-center justify-between pt-2 sm:pt-3 border-t border-gray-100 mt-3">
-          {/* Social Media Icons */}
-          <div className="flex gap-1.5 sm:gap-2">
-            {data.linkedin && (
-              <a 
-                href={`https://${data.linkedin}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-7 h-7 sm:w-8 sm:h-8 bg-business-primary/10 rounded-full flex items-center justify-center hover:bg-business-primary/20 transition-colors"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-business-primary" />
-              </a>
-            )}
-            
-            {data.instagram && (
-              <a 
-                href={`https://instagram.com/${data.instagram}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-7 h-7 sm:w-8 sm:h-8 bg-pink-50 rounded-full flex items-center justify-center hover:bg-pink-100 transition-colors"
-                aria-label="Instagram"
-              >
-                <Instagram className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-pink-600" />
-              </a>
-            )}
+        {/* Footer - Social Media */}
+        {(data.linkedin || data.instagram) && (
+          <div className="flex justify-center pt-2 sm:pt-3 border-t border-gray-100 mt-3">
+            {/* Social Media Icons */}
+            <div className="flex gap-1.5 sm:gap-2">
+              {data.linkedin && (
+                <a 
+                  href={`https://${data.linkedin}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-7 h-7 sm:w-8 sm:h-8 bg-business-primary/10 rounded-full flex items-center justify-center hover:bg-business-primary/20 transition-colors"
+                  aria-label="LinkedIn"
+                >
+                  <Linkedin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-business-primary" />
+                </a>
+              )}
+              
+              {data.instagram && (
+                <a 
+                  href={`https://instagram.com/${data.instagram}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-7 h-7 sm:w-8 sm:h-8 bg-pink-50 rounded-full flex items-center justify-center hover:bg-pink-100 transition-colors"
+                  aria-label="Instagram"
+                >
+                  <Instagram className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-pink-600" />
+                </a>
+              )}
+            </div>
           </div>
-          
-          {/* Location Badge - Smaller and more contained */}
-          <div className="flex items-center gap-1 text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded-full max-w-32 sm:max-w-none">
-            <MapPin className="w-3 h-3 flex-shrink-0" />
-            <span className="truncate text-xs leading-tight">{data.address.split(",")[0]}</span>
-          </div>
-        </div>
+        )}
       </div>
     </Card>
   );

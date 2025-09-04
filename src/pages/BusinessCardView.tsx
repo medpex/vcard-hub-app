@@ -152,32 +152,6 @@ END:VCARD`;
             </Button>
           </div>
 
-          {/* Quick Actions Card */}
-          {cardData.address && (
-            <Card className="mx-4 sm:max-w-2xl sm:mx-auto">
-              <CardContent className="p-4 sm:p-6">
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-center">Weitere Aktionen</h3>
-                  
-                  {/* Address with Google Maps Link */}
-                  <a 
-                    href={`https://maps.google.com/?q=${encodeURIComponent(cardData.address)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-start gap-3 p-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors group touch-manipulation"
-                  >
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-business-primary/10 flex items-center justify-center mt-0.5 flex-shrink-0 group-hover:bg-business-primary/20 transition-colors">
-                      <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-business-primary" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="font-medium text-sm sm:text-base">📍 Standort auf Karte anzeigen</p>
-                      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{cardData.address}</p>
-                    </div>
-                  </a>
-                </div>
-              </CardContent>
-            </Card>
-          )}
 
           {/* Footer */}
           <div className="text-center text-xs sm:text-sm text-muted-foreground px-4">
