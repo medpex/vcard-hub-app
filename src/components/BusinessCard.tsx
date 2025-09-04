@@ -54,6 +54,17 @@ export function BusinessCard({ data, variant = "display", className = "" }: Busi
               <span className="truncate">{data.company}</span>
             </div>
           </div>
+          
+          {/* Company Logo */}
+          {data.companyLogo && (
+            <div className="flex-shrink-0">
+              <img 
+                src={data.companyLogo} 
+                alt={`${data.company} Logo`}
+                className="w-8 h-8 sm:w-12 sm:h-12 object-contain bg-white/10 rounded p-1"
+              />
+            </div>
+          )}
         </div>
       </div>
 

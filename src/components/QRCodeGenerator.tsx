@@ -21,10 +21,14 @@ export function QRCodeGenerator({ businessCardId, className = "" }: QRCodeGenera
   const generateQRCode = async () => {
     setIsGenerating(true);
     try {
-      // In real app, this would be the actual URL to the business card
+      // Always use card subdomain for QR codes
+      const networkUrl = 'https://card.swg-lab.de';
+      
       const businessCardUrl = businessCardId 
-        ? `${window.location.origin}/card/${businessCardId}`
-        : `${window.location.origin}/card/demo`;
+        ? `${networkUrl}/${businessCardId}`
+        : `${networkUrl}/demo`;
+
+      console.log('Generating QR code for URL:', businessCardUrl);
 
       const qrCodeDataUrl = await QRCode.toDataURL(businessCardUrl, {
         errorCorrectionLevel: 'M',
@@ -70,9 +74,14 @@ export function QRCodeGenerator({ businessCardId, className = "" }: QRCodeGenera
   };
 
   const copyQRCodeUrl = async () => {
+    // Always use card subdomain for QR codes
+    const networkUrl = 'https://card.swg-lab.de';
+      
     const businessCardUrl = businessCardId 
-      ? `${window.location.origin}/card/${businessCardId}`
-      : `${window.location.origin}/card/demo`;
+      ? `${networkUrl}/${businessCardId}`
+      : `${networkUrl}/demo`;
+
+    console.log('Copying URL to clipboard:', businessCardUrl);
 
     try {
       await navigator.clipboard.writeText(businessCardUrl);
@@ -90,9 +99,12 @@ export function QRCodeGenerator({ businessCardId, className = "" }: QRCodeGenera
   };
 
   const shareQRCode = async () => {
+    // Always use card subdomain for QR codes
+    const networkUrl = 'https://card.swg-lab.de';
+      
     const businessCardUrl = businessCardId 
-      ? `${window.location.origin}/card/${businessCardId}`
-      : `${window.location.origin}/card/demo`;
+      ? `${networkUrl}/${businessCardId}`
+      : `${networkUrl}/demo`;
 
     if (navigator.share) {
       try {
@@ -157,7 +169,7 @@ export function QRCodeGenerator({ businessCardId, className = "" }: QRCodeGenera
 
             <div className="text-center">
               <Label className="text-sm text-muted-foreground">
-                QR-Code verweist auf: /card/{businessCardId || 'demo'}
+                QR-Code verweist auf: card.swg-lab.de/{businessCardId || 'demo'}
               </Label>
             </div>
           </div>

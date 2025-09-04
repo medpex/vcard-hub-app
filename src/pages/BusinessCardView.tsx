@@ -1,44 +1,72 @@
 import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { BusinessCard } from "@/components/BusinessCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Download, Share2, Phone, Mail, MapPin, Globe, Linkedin } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { getCard } from "@/lib/client-api";
 
-// Mock data - enhanced with additional fields
-const mockCardData = {
-  id: "1",
-  name: "Max Mustermann",
-  position: "Geschäftsführer",
-  company: "Stadtwerke Geesthacht",
-  email: "max.mustermann@stadtwerke-geesthacht.de",
-  phone: "+49 4152 123456",
-  whatsapp: "+49 152 987654321",
-  address: "Bergedorfer Straße 2, 21502 Geesthacht",
-  website: "www.stadtwerke-geesthacht.de",
-  linkedin: "linkedin.com/in/max-mustermann",
-  instagram: "maxmustermann_official",
-  bio: "Leidenschaftlicher Führungskraft mit über 15 Jahren Erfahrung in der Energiebranche. Fokus auf nachhaltige Energielösungen und Kundenzufriedenheit.",
-  avatar: "/lovable-uploads/c2132334-c633-4c02-af9f-2f9aa45da5dd.png"
-};
 
 export default function BusinessCardView() {
   const { id } = useParams();
   const { toast } = useToast();
+  const [cardData, setCardData] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (id) {
+      loadCard(id);
+    } else {
+      setIsLoading(false);
+    }
+  }, [id]);
+
+  const loadCard = async (cardId: string) => {
+    try {
+      setIsLoading(true);
+      const card = await getCard(cardId);
+      if (card) {
+        setCardData({
+          id: card.id,
+          name: card.name,
+          position: card.position || "",
+          company: card.company || "",
+          email: card.email || "",
+          phone: card.phone || "",
+          whatsapp: card.whatsapp || "",
+          address: card.address || "",
+          website: card.website || "",
+          linkedin: card.linkedin || "",
+          instagram: card.instagram || "",
+          bio: card.bio || "",
+          avatar: card.avatar || "",
+          companyLogo: card.companyLogo || ""
+        });
+      } else {
+        setError("Visitenkarte nicht gefunden");
+      }
+    } catch (error) {
+      setError("Fehler beim Laden der Visitenkarte");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSaveContact = () => {
     // Generate vCard data
     const vCardData = `BEGIN:VCARD
 VERSION:3.0
-FN:${mockCardData.name}
-ORG:${mockCardData.company}
-TITLE:${mockCardData.position}
-EMAIL:${mockCardData.email}
-TEL:${mockCardData.phone}
-TEL;TYPE=cell:${mockCardData.whatsapp}
-ADR:;;${mockCardData.address};;;;
-URL:${mockCardData.website}
-NOTE:${mockCardData.bio}
+FN:${cardData.name}
+ORG:${cardData.company}
+TITLE:${cardData.position}
+EMAIL:${cardData.email}
+TEL:${cardData.phone}
+TEL;TYPE=cell:${cardData.whatsapp}
+ADR:;;${cardData.address};;;;
+URL:${cardData.website}
+NOTE:${cardData.bio}
 END:VCARD`;
 
     // Create and download vCard file
@@ -46,7 +74,7 @@ END:VCARD`;
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${mockCardData.name.replace(/\s+/g, '_')}.vcf`;
+    link.download = `${cardData.name.replace(/\s+/g, '_')}.vcf`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -62,8 +90,8 @@ END:VCARD`;
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `${mockCardData.name} - ${mockCardData.position}`,
-          text: `Digitale Visitenkarte von ${mockCardData.name}`,
+          title: `${cardData.name} - ${cardData.position}`,
+          text: `Digitale Visitenkarte von ${cardData.name}`,
           url: window.location.href,
         });
       } catch (error) {
@@ -79,6 +107,28 @@ END:VCARD`;
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-business-secondary via-background to-business-secondary/50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-business-primary mx-auto mb-4"></div>
+          <p>Visitenkarte wird geladen...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-business-secondary via-background to-business-secondary/50 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-red-600 mb-4">Fehler</h1>
+          <p className="text-muted-foreground">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-business-secondary via-background to-business-secondary/50">
       <div className="container mx-auto px-4 py-6 sm:py-8">
@@ -86,7 +136,7 @@ END:VCARD`;
           {/* Main Business Card Display - Better container */}
           <div className="flex justify-center px-2 sm:px-4">
             <div className="w-full max-w-sm">
-              <BusinessCard data={mockCardData} />
+              <BusinessCard data={cardData} />
             </div>
           </div>
 
@@ -107,44 +157,48 @@ END:VCARD`;
             <CardContent className="p-4 sm:p-6">
               <div className="space-y-4 sm:space-y-6">
                 <div className="text-center border-b pb-4">
-                  <h1 className="text-xl sm:text-2xl font-bold text-business-text">{mockCardData.name}</h1>
-                  <p className="text-base sm:text-lg text-business-primary font-medium">{mockCardData.position}</p>
-                  <p className="text-sm sm:text-base text-muted-foreground">{mockCardData.company}</p>
+                  <h1 className="text-xl sm:text-2xl font-bold text-business-text">{cardData.name}</h1>
+                  <p className="text-base sm:text-lg text-business-primary font-medium">{cardData.position}</p>
+                  <p className="text-sm sm:text-base text-muted-foreground">{cardData.company}</p>
                 </div>
 
                 <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
                   {/* Email */}
-                  <a 
-                    href={`mailto:${mockCardData.email}`}
-                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors group touch-manipulation"
-                  >
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-business-primary/10 flex items-center justify-center group-hover:bg-business-primary/20 transition-colors flex-shrink-0">
-                      <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-business-primary" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="font-medium text-sm sm:text-base">E-Mail</p>
-                      <p className="text-xs sm:text-sm text-muted-foreground truncate">{mockCardData.email}</p>
-                    </div>
-                  </a>
+                  {cardData.email && (
+                    <a 
+                      href={`mailto:${cardData.email}`}
+                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors group touch-manipulation"
+                    >
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-business-primary/10 flex items-center justify-center group-hover:bg-business-primary/20 transition-colors flex-shrink-0">
+                        <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-business-primary" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium text-sm sm:text-base">E-Mail</p>
+                        <p className="text-xs sm:text-sm text-muted-foreground truncate">{cardData.email}</p>
+                      </div>
+                    </a>
+                  )}
 
                   {/* Phone */}
-                  <a 
-                    href={`tel:${mockCardData.phone}`}
-                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors group touch-manipulation"
-                  >
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-business-primary/10 flex items-center justify-center group-hover:bg-business-primary/20 transition-colors flex-shrink-0">
-                      <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-business-primary" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="font-medium text-sm sm:text-base">Telefon</p>
-                      <p className="text-xs sm:text-sm text-muted-foreground">{mockCardData.phone}</p>
-                    </div>
-                  </a>
+                  {cardData.phone && (
+                    <a 
+                      href={`tel:${cardData.phone}`}
+                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors group touch-manipulation"
+                    >
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-business-primary/10 flex items-center justify-center group-hover:bg-business-primary/20 transition-colors flex-shrink-0">
+                        <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-business-primary" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium text-sm sm:text-base">Telefon</p>
+                        <p className="text-xs sm:text-sm text-muted-foreground">{cardData.phone}</p>
+                      </div>
+                    </a>
+                  )}
 
                   {/* Website */}
-                  {mockCardData.website && (
+                  {cardData.website && (
                     <a 
-                      href={`https://${mockCardData.website}`}
+                      href={`https://${cardData.website}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors group touch-manipulation"
@@ -154,15 +208,15 @@ END:VCARD`;
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="font-medium text-sm sm:text-base">Website</p>
-                        <p className="text-xs sm:text-sm text-muted-foreground truncate">{mockCardData.website}</p>
+                        <p className="text-xs sm:text-sm text-muted-foreground truncate">{cardData.website}</p>
                       </div>
                     </a>
                   )}
 
                   {/* LinkedIn */}
-                  {mockCardData.linkedin && (
+                  {cardData.linkedin && (
                     <a 
-                      href={`https://${mockCardData.linkedin}`}
+                      href={`https://${cardData.linkedin}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors group touch-manipulation"
@@ -172,29 +226,31 @@ END:VCARD`;
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="font-medium text-sm sm:text-base">LinkedIn</p>
-                        <p className="text-xs sm:text-sm text-muted-foreground truncate">{mockCardData.linkedin}</p>
+                        <p className="text-xs sm:text-sm text-muted-foreground truncate">{cardData.linkedin}</p>
                       </div>
                     </a>
                   )}
                 </div>
 
                 {/* Address */}
-                <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/30">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-business-primary/10 flex items-center justify-center mt-0.5 flex-shrink-0">
-                    <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-business-primary" />
+                {cardData.address && (
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/30">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-business-primary/10 flex items-center justify-center mt-0.5 flex-shrink-0">
+                      <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-business-primary" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="font-medium text-sm sm:text-base">Adresse</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{cardData.address}</p>
+                    </div>
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="font-medium text-sm sm:text-base">Adresse</p>
-                    <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{mockCardData.address}</p>
-                  </div>
-                </div>
+                )}
               </div>
             </CardContent>
           </Card>
 
           {/* Footer */}
           <div className="text-center text-xs sm:text-sm text-muted-foreground px-4">
-            <p>Digitale Visitenkarte • Powered by {mockCardData.company}</p>
+            <p>Digitale Visitenkarte • Powered by {cardData.company || 'vCard Hub'}</p>
           </div>
         </div>
       </div>

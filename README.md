@@ -1,73 +1,274 @@
-# Welcome to your Lovable project
+# VCard Hub - Digitale Visitenkarten für Stadtwerke Geesthacht
 
-## Project info
+Eine moderne, webbasierte Anwendung zur Erstellung und Verwaltung von digitalen Visitenkarten mit QR-Code-Funktionalität, speziell entwickelt für die Stadtwerke Geesthacht.
 
-**URL**: https://lovable.dev/projects/2d472c32-3261-485f-83d0-2aab90c5fbc2
+## 🌟 Features
 
-## How can I edit this code?
+### 📇 Visitenkarten-Management
+- **Digitale Visitenkarten erstellen**: Vollständige Kontaktinformationen mit Profilbildern
+- **Live-Vorschau**: Sofortige Vorschau der Visitenkarte während der Bearbeitung
+- **Responsive Design**: Optimiert für alle Geräte (Desktop, Tablet, Mobile)
+- **Öffentliche Freigabe**: Visitenkarten über eindeutige URLs teilen
 
-There are several ways of editing your application.
+### 👥 Mitarbeiter-Verwaltung
+- **Mitarbeiter-Datenbank**: Zentrale Verwaltung aller Teammitglieder
+- **Profilbilder**: Automatisches kreisförmiges Zuschneiden von Profilfotos
+- **Zoom-Funktion**: Präzise Positionierung und Skalierung der Bilder
+- **Status-Tracking**: Aktiv/Inaktiv Status und Visitenkarten-Zuordnung
 
-**Use Lovable**
+### 🎨 Anpassbare Designs
+- **Farb-Schemata**: Vordefinierte und benutzerdefinierte Farbpaletten
+- **Live-Vorschau**: Echtzeit-Vorschau der Design-Änderungen
+- **Unternehmens-Branding**: Logo und Standard-Informationen konfigurierbar
+- **Responsive Layouts**: Automatische Anpassung an verschiedene Bildschirmgrößen
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/2d472c32-3261-485f-83d0-2aab90c5fbc2) and start prompting.
+### 📱 QR-Code-System
+- **Automatische QR-Generierung**: Für jede Visitenkarte
+- **Multiple QR-Codes**: Verschiedene QR-Codes pro Karte möglich
+- **Download-Funktionen**: QR-Codes in verschiedenen Formaten
+- **URL-Struktur**: `https://card.swg-lab.de/{cardId}`
 
-Changes made via Lovable will be committed automatically to this repo.
+### 📊 Dashboard & Analytics
+- **Übersichts-Dashboard**: Statistiken und wichtige Kennzahlen
+- **Mitarbeiter-Statistiken**: Anzahl aktiver Mitarbeiter und Visitenkarten
+- **Benutzerfreundliche Navigation**: Intuitive Menüführung
 
-**Use your preferred IDE**
+## 🛠 Technologie-Stack
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Frontend
+- **React 18** mit TypeScript
+- **Vite** als Build-Tool und Dev-Server
+- **Tailwind CSS** für Styling
+- **shadcn/ui** als UI-Komponenten-Bibliothek
+- **Lucide React** für Icons
+- **React Router** für Navigation
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Backend
+- **Node.js** mit Express.js
+- **PostgreSQL** Datenbank
+- **Prisma ORM** für Datenbankoperationen
+- **CORS** für Cross-Origin-Requests
 
-Follow these steps:
+### Weitere Tools
+- **QR Code Generator**: Automatische QR-Code-Erstellung
+- **Canvas API**: Für Bildbearbeitung und -zuschnitt
+- **Base64 Encoding**: Für Bild-Speicherung
+- **Responsive Design**: Mobile-First-Ansatz
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 📁 Projektstruktur
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+```
+vcard-hub-app/
+├── src/
+│   ├── components/          # Wiederverwendbare UI-Komponenten
+│   │   ├── ui/             # shadcn/ui Basis-Komponenten
+│   │   ├── AvatarUpload.tsx     # Profilbild-Upload mit Zoom
+│   │   ├── ImageCropper.tsx     # Bildbearbeitung und Zuschnitt
+│   │   ├── QRCodeGenerator.tsx  # QR-Code-Generierung
+│   │   └── EmployeeDialog.tsx   # Mitarbeiter-Dialog
+│   ├── pages/              # Seiten-Komponenten
+│   │   ├── Dashboard.tsx   # Haupt-Dashboard
+│   │   ├── CardEditor.tsx  # Visitenkarten-Editor
+│   │   ├── Employees.tsx   # Mitarbeiter-Verwaltung
+│   │   ├── Settings.tsx    # Einstellungen und Design
+│   │   └── QRCodes.tsx     # QR-Code-Verwaltung
+│   ├── lib/                # Utility-Funktionen
+│   │   ├── client-api.ts   # Frontend-API-Client
+│   │   ├── api.ts          # Backend-API-Funktionen
+│   │   └── db.ts          # Prisma-Datenbankverbindung
+│   └── hooks/              # Custom React Hooks
+├── prisma/
+│   └── schema.prisma       # Datenbankschema
+├── server.cjs              # Express.js Backend-Server
+├── vite.config.ts          # Vite-Konfiguration
+└── tailwind.config.js      # Tailwind-CSS-Konfiguration
+```
 
-# Step 3: Install the necessary dependencies.
-npm i
+## 🚀 Installation & Setup
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+### Voraussetzungen
+- Node.js (v18 oder höher)
+- PostgreSQL-Datenbank
+- Git
+
+### 1. Repository klonen
+```bash
+git clone <repository-url>
+cd vcard-hub-app
+```
+
+### 2. Dependencies installieren
+```bash
+npm install
+```
+
+### 3. Umgebungsvariablen konfigurieren
+```bash
+# .env erstellen und konfigurieren
+DATABASE_URL="postgresql://username:password@localhost:5432/vcard_hub"
+```
+
+### 4. Datenbank setup
+```bash
+# Prisma generieren
+npx prisma generate
+
+# Datenbank migrieren
+npx prisma db push
+
+# Optional: Prisma Studio öffnen
+npx prisma studio
+```
+
+### 5. Anwendung starten
+
+**Frontend (Port 8080):**
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+**Backend (Port 3001):**
+```bash
+npm run server
+```
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Die Anwendung ist dann unter `http://localhost:8080` erreichbar.
 
-**Use GitHub Codespaces**
+## 🗄 Datenbank-Schema
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Tabellen-Übersicht
 
-## What technologies are used for this project?
+**Users** - Benutzer-Verwaltung
+- `id`: Eindeutige Benutzer-ID
+- `email`: E-Mail-Adresse
+- `name`: Benutzername
 
-This project is built with:
+**Cards** - Visitenkarten
+- `id`: Karten-ID
+- `name`, `position`, `company`: Grunddaten
+- `email`, `phone`, `whatsapp`: Kontaktdaten
+- `address`, `website`: Weitere Informationen
+- `linkedin`, `instagram`: Social Media
+- `bio`: Beschreibung
+- `avatar`, `companyLogo`: Bilder (Base64)
+- `slug`: URL-Slug für öffentlichen Zugriff
+- `views`: Aufruf-Statistiken
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+**Employees** - Mitarbeiter-Verwaltung
+- `id`: Mitarbeiter-ID
+- `name`, `position`, `email`, `phone`: Grunddaten
+- `department`: Abteilung
+- `status`: Aktiv/Inaktiv
+- `hasCard`: Visitenkarten-Zuordnung
+- `avatar`: Profilbild (Base64)
 
-## How can I deploy this project?
+**QRCodes** - QR-Code-Verwaltung
+- `id`: QR-Code-ID
+- `name`: Bezeichnung
+- `url`: Ziel-URL
+- `qrData`: QR-Code-Daten
+- `downloads`: Download-Statistiken
 
-Simply open [Lovable](https://lovable.dev/projects/2d472c32-3261-485f-83d0-2aab90c5fbc2) and click on Share -> Publish.
+**Settings** - System-Einstellungen
+- `primaryColor`, `secondaryColor`: Farbschema
+- `textColor`, `backgroundColor`: Layout-Farben
+- `companyName`, `companyLogo`: Unternehmens-Daten
+- `defaultAddress`, `defaultWebsite`: Standard-Werte
 
-## Can I connect a custom domain to my Lovable project?
+## 🎨 Design-System
 
-Yes, you can!
+### Farbschemata
+- **Business Blue**: Professionelles Blau-Schema
+- **Nature Green**: Umweltfreundliches Grün
+- **Sunset Orange**: Warmes Orange-Schema
+- **Royal Purple**: Elegantes Lila
+- **Custom**: Benutzerdefinierte Farben
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### UI-Komponenten
+- Basiert auf **shadcn/ui**
+- **Tailwind CSS** für Styling
+- **Responsive Design** für alle Geräte
+- **Dark/Light Mode** unterstützt
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+## 🔧 API-Endpunkte
+
+### Visitenkarten-API
+- `GET /api/cards` - Alle Karten abrufen
+- `POST /api/cards` - Neue Karte erstellen
+- `GET /api/cards/:id` - Spezifische Karte abrufen
+- `PUT /api/cards/:id` - Karte aktualisieren
+- `DELETE /api/cards/:id` - Karte löschen
+
+### Mitarbeiter-API
+- `GET /api/employees` - Alle Mitarbeiter
+- `POST /api/employees` - Mitarbeiter erstellen
+- `PUT /api/employees/:id` - Mitarbeiter aktualisieren
+- `DELETE /api/employees/:id` - Mitarbeiter löschen
+
+### QR-Code-API
+- `GET /api/cards/:cardId/qrcodes` - QR-Codes einer Karte
+- `POST /api/qrcodes` - QR-Code erstellen
+- `DELETE /api/qrcodes/:id` - QR-Code löschen
+
+### Einstellungen-API
+- `GET /api/settings` - Einstellungen abrufen
+- `PUT /api/settings` - Einstellungen speichern
+
+## 📱 Mobile Optimierung
+
+- **Responsive Design**: Automatische Anpassung an Bildschirmgrößen
+- **Touch-optimiert**: Alle Interaktionen für Touchscreens optimiert
+- **PWA-ready**: Vorbereitet für Progressive Web App
+- **Performance**: Optimiert für mobile Verbindungen
+
+## 🔒 Sicherheit
+
+- **Input-Validierung**: Alle Eingaben werden validiert
+- **File-Upload-Beschränkungen**: Maximale Dateigröße 5MB
+- **CORS-Konfiguration**: Sichere Cross-Origin-Requests
+- **SQL-Injection-Schutz**: Durch Prisma ORM
+- **XSS-Schutz**: Sichere Ausgabe von Benutzerdaten
+
+## 📈 Erweiterungsmöglichkeiten
+
+### Geplante Features
+- **Benutzer-Authentifizierung**: Login/Logout-System
+- **Team-Management**: Mehrere Benutzer-Rollen
+- **Analytics**: Detaillierte Aufruf-Statistiken
+- **Export-Funktionen**: PDF/vCard-Export
+- **API-Integration**: Externe Systeme anbinden
+- **Push-Benachrichtigungen**: Für Updates
+
+### Technische Verbesserungen
+- **Caching**: Redis für bessere Performance
+- **CDN**: Für statische Assets
+- **Database-Optimierung**: Indizierung und Queries
+- **Tests**: Unit- und Integrationstests
+- **CI/CD**: Automatische Deployments
+
+## 🐛 Bekannte Probleme
+
+- **Bildverarbeitung**: Sehr große Bilder können langsam sein
+- **Browser-Kompatibilität**: Canvas-Features in älteren Browsern
+- **Performance**: Bei vielen Mitarbeitern kann die Liste langsam werden
+
+## 💡 Beitragen
+
+1. Fork des Repositories
+2. Feature-Branch erstellen (`git checkout -b feature/new-feature`)
+3. Änderungen committen (`git commit -m 'Add new feature'`)
+4. Branch pushen (`git push origin feature/new-feature`)
+5. Pull Request erstellen
+
+## 📄 Lizenz
+
+Dieses Projekt wurde speziell für die Stadtwerke Geesthacht entwickelt.
+
+## 📞 Kontakt
+
+**Entwickelt für:**
+Stadtwerke Geesthacht
+Website: www.stadtwerke-geesthacht.de
+
+**Technische Umsetzung:**
+Entwickelt mit Claude Code von Anthropic

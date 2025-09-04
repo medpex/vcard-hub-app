@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import CardEditor from "./pages/CardEditor";
 import QRCodes from "./pages/QRCodes";
 import Employees from "./pages/Employees";
+import Settings from "./pages/Settings";
 import BusinessCardView from "./pages/BusinessCardView";
 import NotFound from "./pages/NotFound";
 
@@ -25,10 +26,11 @@ const App = () => (
           <Route path="/cards" element={<Layout><CardEditor /></Layout>} />
           <Route path="/qr-codes" element={<Layout><QRCodes /></Layout>} />
           <Route path="/employees" element={<Layout><Employees /></Layout>} />
-          <Route path="/settings" element={<Layout><Dashboard /></Layout>} />
+          <Route path="/settings" element={<Layout><Settings /></Layout>} />
           
           {/* Public Business Card View */}
           <Route path="/card/:id" element={<BusinessCardView />} />
+          <Route path="/:id" element={<BusinessCardView />} />
           
           {/* 404 */}
           <Route path="*" element={<NotFound />} />

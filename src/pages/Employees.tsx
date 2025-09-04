@@ -1,7 +1,9 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Mail, Phone, MoreHorizontal, User } from "lucide-react";
+import { Plus, Mail, Phone, MoreHorizontal, User, Edit, UserPlus, Trash2 } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,11 +12,87 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-// Empty data - users can add their own
-const mockEmployees: any[] = [];
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { EmployeeDialog } from "@/components/EmployeeDialog";
+import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
+import { getAllEmployees, deleteEmployee } from "@/lib/client-api";
 
 export default function Employees() {
+  const [employees, setEmployees] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingEmployee, setEditingEmployee] = useState<any>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [employeeToDelete, setEmployeeToDelete] = useState<any>(null);
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    loadEmployees();
+  }, []);
+
+  const loadEmployees = async () => {
+    try {
+      setIsLoading(true);
+      const data = await getAllEmployees();
+      setEmployees(data);
+    } catch (error) {
+      toast({
+        title: "Fehler",
+        description: "Mitarbeiter konnten nicht geladen werden.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAddEmployee = () => {
+    setEditingEmployee(null);
+    setDialogOpen(true);
+  };
+
+  const handleEditEmployee = (employee: any) => {
+    setEditingEmployee(employee);
+    setDialogOpen(true);
+  };
+
+  const handleDeleteEmployee = async () => {
+    if (!employeeToDelete) return;
+    
+    try {
+      await deleteEmployee(employeeToDelete.id);
+      setEmployees(employees.filter(emp => emp.id !== employeeToDelete.id));
+      toast({
+        title: "Mitarbeiter entfernt",
+        description: "Der Mitarbeiter wurde erfolgreich entfernt.",
+      });
+    } catch (error) {
+      toast({
+        title: "Fehler",
+        description: "Mitarbeiter konnte nicht entfernt werden.",
+        variant: "destructive"
+      });
+    } finally {
+      setDeleteDialogOpen(false);
+      setEmployeeToDelete(null);
+    }
+  };
+
+  const handleCreateCard = (employee: any) => {
+    navigate(`/cards?employee=${employee.id}&name=${encodeURIComponent(employee.name)}&email=${encodeURIComponent(employee.email)}&phone=${encodeURIComponent(employee.phone)}&position=${encodeURIComponent(employee.position)}`);
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -25,7 +103,7 @@ export default function Employees() {
             Verwalten Sie Ihre Mitarbeiter und deren Visitenkarten
           </p>
         </div>
-        <Button className="gap-2">
+        <Button onClick={handleAddEmployee} className="gap-2">
           <Plus className="w-4 h-4" />
           Mitarbeiter hinzufügen
         </Button>
@@ -41,7 +119,7 @@ export default function Employees() {
             <User className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{mockEmployees.length}</div>
+            <div className="text-2xl font-bold">{employees.length}</div>
             <p className="text-xs text-muted-foreground">
               Registrierte Nutzer
             </p>
@@ -57,7 +135,7 @@ export default function Employees() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {mockEmployees.filter(emp => emp.status === "Aktiv").length}
+              {employees.filter(emp => emp.status === "Aktiv").length}
             </div>
             <p className="text-xs text-muted-foreground">
               Mit Visitenkarten
@@ -74,10 +152,10 @@ export default function Employees() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {mockEmployees.filter(emp => emp.hasCard).length}
+              {employees.filter(emp => emp.hasCard).length}
             </div>
             <p className="text-xs text-muted-foreground">
-              Von {mockEmployees.length} Mitarbeitern
+              Von {employees.length} Mitarbeitern
             </p>
           </CardContent>
         </Card>
@@ -93,22 +171,33 @@ export default function Employees() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {mockEmployees.length === 0 ? (
+            {isLoading ? (
+              <div className="text-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-business-primary mx-auto mb-4"></div>
+                <p className="text-muted-foreground">Mitarbeiter werden geladen...</p>
+              </div>
+            ) : employees.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
                 <User className="w-12 h-12 mx-auto mb-4 opacity-50" />
                 <p>Noch keine Mitarbeiter hinzugefügt</p>
                 <p className="text-sm">Klicken Sie auf "Mitarbeiter hinzufügen" um zu beginnen</p>
               </div>
             ) : (
-              mockEmployees.map((employee) => (
+              employees.map((employee) => (
                 <div key={employee.id} className="flex items-center justify-between p-4 border rounded-lg">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-business-primary/10 flex items-center justify-center">
-                      <User className="w-5 h-5 text-business-primary" />
-                    </div>
+                    <Avatar className="w-10 h-10">
+                      <AvatarImage src={employee.avatar} alt={employee.name} />
+                      <AvatarFallback className="bg-business-primary/10 text-business-primary font-semibold">
+                        {employee.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
                     <div>
                       <h4 className="font-medium">{employee.name}</h4>
                       <p className="text-sm text-muted-foreground">{employee.position}</p>
+                      {employee.department && (
+                        <p className="text-xs text-muted-foreground">{employee.department}</p>
+                      )}
                       <div className="flex items-center gap-4 mt-1">
                         <div className="flex items-center gap-1 text-xs text-muted-foreground">
                           <Mail className="w-3 h-3" />
@@ -141,11 +230,27 @@ export default function Employees() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Aktionen</DropdownMenuLabel>
-                        <DropdownMenuItem>Bearbeiten</DropdownMenuItem>
-                        <DropdownMenuItem>Visitenkarte erstellen</DropdownMenuItem>
-                        <DropdownMenuItem>E-Mail senden</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleEditEmployee(employee)}>
+                          <Edit className="w-4 h-4 mr-2" />
+                          Bearbeiten
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleCreateCard(employee)}>
+                          <UserPlus className="w-4 h-4 mr-2" />
+                          Visitenkarte erstellen
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => window.location.href = `mailto:${employee.email}`}>
+                          <Mail className="w-4 h-4 mr-2" />
+                          E-Mail senden
+                        </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-destructive">
+                        <DropdownMenuItem 
+                          className="text-destructive"
+                          onClick={() => {
+                            setEmployeeToDelete(employee);
+                            setDeleteDialogOpen(true);
+                          }}
+                        >
+                          <Trash2 className="w-4 h-4 mr-2" />
                           Entfernen
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -157,6 +262,36 @@ export default function Employees() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Employee Dialog */}
+      <EmployeeDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        employee={editingEmployee}
+        onSuccess={loadEmployees}
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Mitarbeiter entfernen</AlertDialogTitle>
+            <AlertDialogDescription>
+              Sind Sie sicher, dass Sie {employeeToDelete?.name} entfernen möchten?
+              Diese Aktion kann nicht rückgängig gemacht werden.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteEmployee}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Entfernen
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

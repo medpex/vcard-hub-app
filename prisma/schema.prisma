@@ -1,0 +1,120 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  name      String?
+  cards     Card[]
+  employees Employee[]
+  settings  Settings?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@map("users")
+}
+
+model Card {
+  id          String   @id @default(cuid())
+  name        String
+  position    String?
+  company     String?
+  email       String?
+  phone       String?
+  whatsapp    String?
+  address     String?
+  website     String?
+  linkedin    String?
+  instagram   String?
+  bio         String?
+  avatar      String?
+  companyLogo String?
+  
+  // Relationships
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  qrCodes     QRCode[]
+  
+  // Metadata
+  isPublic    Boolean  @default(false)
+  slug        String?  @unique
+  views       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("cards")
+}
+
+model QRCode {
+  id        String   @id @default(cuid())
+  name      String
+  url       String
+  qrData    String
+  
+  // Relationships
+  card      Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  cardId    String
+  
+  // Metadata
+  downloads Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("qr_codes")
+}
+
+model Employee {
+  id         String  @id @default(cuid())
+  name       String
+  position   String
+  email      String
+  phone      String
+  department String?
+  status     String  @default("Aktiv")
+  hasCard    Boolean @default(false)
+  lastActive String  @default("Gerade hinzugefügt")
+  avatar     String? // Base64-encoded avatar image
+  
+  // Relationships
+  user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("employees")
+}
+
+model Settings {
+  id              String @id @default(cuid())
+  primaryColor    String @default("#1e40af")
+  secondaryColor  String @default("#f8fafc")
+  textColor       String @default("#1f2937")
+  backgroundColor String @default("#ffffff")
+  borderRadius    String @default("8")
+  companyName     String @default("Stadtwerke Geesthacht")
+  companyLogo     String @default("")
+  defaultAddress  String @default("Stadtwerke Geesthacht, Geesthacht")
+  defaultWebsite  String @default("www.stadtwerke-geesthacht.de")
+  
+  // Relationships
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @unique
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("settings")
+}
