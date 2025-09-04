@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Mail, Phone, MoreHorizontal, User, Edit, UserPlus, Trash2 } from "lucide-react";
+import { Plus, Mail, Phone, MoreHorizontal, User, Edit, UserPlus, Trash2, CreditCard } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -90,6 +90,13 @@ export default function Employees() {
   };
 
   const handleCreateCard = (employee: any) => {
+    navigate(`/cards?employee=${employee.id}&name=${encodeURIComponent(employee.name)}&email=${encodeURIComponent(employee.email)}&phone=${encodeURIComponent(employee.phone)}&position=${encodeURIComponent(employee.position)}`);
+  };
+
+  const handleEditCard = (employee: any) => {
+    // Navigate to card editor for existing card
+    // This would require getting the card ID associated with the employee
+    // For now, we'll create a new card with the employee data
     navigate(`/cards?employee=${employee.id}&name=${encodeURIComponent(employee.name)}&email=${encodeURIComponent(employee.email)}&phone=${encodeURIComponent(employee.phone)}&position=${encodeURIComponent(employee.position)}`);
   };
 
@@ -234,10 +241,17 @@ export default function Employees() {
                           <Edit className="w-4 h-4 mr-2" />
                           Bearbeiten
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleCreateCard(employee)}>
-                          <UserPlus className="w-4 h-4 mr-2" />
-                          Visitenkarte erstellen
-                        </DropdownMenuItem>
+                        {employee.hasCard ? (
+                          <DropdownMenuItem onClick={() => handleEditCard(employee)}>
+                            <CreditCard className="w-4 h-4 mr-2" />
+                            Visitenkarte bearbeiten
+                          </DropdownMenuItem>
+                        ) : (
+                          <DropdownMenuItem onClick={() => handleCreateCard(employee)}>
+                            <UserPlus className="w-4 h-4 mr-2" />
+                            Visitenkarte erstellen
+                          </DropdownMenuItem>
+                        )}
                         <DropdownMenuItem onClick={() => window.location.href = `mailto:${employee.email}`}>
                           <Mail className="w-4 h-4 mr-2" />
                           E-Mail senden

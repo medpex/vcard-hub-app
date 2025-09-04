@@ -228,9 +228,11 @@ export default function CardEditor() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Visitenkarte bearbeiten</h2>
+          <h2 className="text-2xl font-bold tracking-tight">
+            {currentCardId ? 'Visitenkarte bearbeiten' : 'Neue Visitenkarte erstellen'}
+          </h2>
           <p className="text-muted-foreground">
-            Erstellen und bearbeiten Sie digitale Visitenkarten
+            {currentCardId ? 'Bearbeiten Sie Ihre digitale Visitenkarte' : 'Erstellen Sie eine neue digitale Visitenkarte'}
           </p>
         </div>
         <div className="flex gap-2">
@@ -244,7 +246,12 @@ export default function CardEditor() {
           </Button>
           <Button onClick={handleSave} disabled={isLoading} className="gap-2">
             <Save className="w-4 h-4" />
-            {isLoading ? 'Speichern...' : 'Speichern'}
+            {isLoading 
+              ? 'Speichern...' 
+              : currentCardId 
+                ? 'Aktualisieren' 
+                : 'Erstellen'
+            }
           </Button>
         </div>
       </div>

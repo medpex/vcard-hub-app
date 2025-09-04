@@ -4,7 +4,7 @@ import { QRCodeGenerator } from "@/components/QRCodeGenerator";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Download, Eye, MoreHorizontal, User, Trash2 } from "lucide-react";
+import { Download, Eye, MoreHorizontal, User, Trash2, Edit } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -40,6 +40,10 @@ export default function QRCodes() {
 
   const handleViewCard = (cardId: string) => {
     navigate(`/card/${cardId}`);
+  };
+
+  const handleEditCard = (cardId: string) => {
+    navigate(`/cards?id=${cardId}`);
   };
 
   const handleDeleteCard = async (cardId: string, cardName: string) => {
@@ -234,6 +238,10 @@ export default function QRCodes() {
                         <DropdownMenuItem onClick={() => handleViewCard(qrCode.id)}>
                           <Eye className="w-4 h-4 mr-2" />
                           Ansehen
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleEditCard(qrCode.id)}>
+                          <Edit className="w-4 h-4 mr-2" />
+                          Bearbeiten
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Download className="w-4 h-4 mr-2" />
