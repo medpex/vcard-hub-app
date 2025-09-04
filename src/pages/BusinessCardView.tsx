@@ -55,18 +55,19 @@ export default function BusinessCardView() {
   };
 
   const handleSaveContact = () => {
-    // Generate vCard data
+    // Generate vCard data with proper formatting
     const vCardData = `BEGIN:VCARD
 VERSION:3.0
 FN:${cardData.name}
+N:${cardData.name.split(' ').reverse().join(';')}
 ORG:${cardData.company}
 TITLE:${cardData.position}
 EMAIL:${cardData.email}
-TEL:${cardData.phone}
-TEL;TYPE=cell:${cardData.whatsapp}
-ADR:;;${cardData.address};;;;
-URL:${cardData.website}
-NOTE:${cardData.bio}
+TEL:${cardData.phone}${cardData.whatsapp ? `
+TEL;TYPE=cell:${cardData.whatsapp}` : ''}${cardData.address ? `
+ADR:;;${cardData.address};;;;` : ''}${cardData.website ? `
+URL:${cardData.website}` : ''}${cardData.bio ? `
+NOTE:${cardData.bio}` : ''}
 END:VCARD`;
 
     // Create and download vCard file
