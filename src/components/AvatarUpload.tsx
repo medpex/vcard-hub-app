@@ -62,6 +62,7 @@ export function AvatarUpload({ currentAvatar, userName, onAvatarChange, size = "
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button
+              type="button"
               size="sm"
               variant="secondary"
               className="absolute -bottom-1 -right-1 rounded-full p-1.5 h-auto shadow-md group-hover:shadow-lg transition-shadow"
@@ -99,10 +100,10 @@ export function AvatarUpload({ currentAvatar, userName, onAvatarChange, size = "
             </div>
             
             <div className="flex justify-end space-x-2 pt-4">
-              <Button variant="outline" onClick={handleCancel}>
+              <Button type="button" variant="outline" onClick={handleCancel}>
                 Abbrechen
               </Button>
-              <Button onClick={handleSave} disabled={!tempAvatar}>
+              <Button type="button" onClick={handleSave} disabled={!tempAvatar}>
                 Speichern
               </Button>
             </div>
@@ -111,6 +112,7 @@ export function AvatarUpload({ currentAvatar, userName, onAvatarChange, size = "
       </div>
       
       <Button
+        type="button"
         variant="ghost"
         size="sm"
         className="text-xs text-muted-foreground h-auto p-1"

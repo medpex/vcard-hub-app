@@ -43,9 +43,10 @@ model Card {
   companyLogo String?
   
   // Relationships
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
   qrCodes     QRCode[]
+  employee    Employee[] @relation("EmployeeCard")
   
   // Metadata
   isPublic    Boolean  @default(false)
@@ -84,12 +85,14 @@ model Employee {
   department String?
   status     String  @default("Aktiv")
   hasCard    Boolean @default(false)
+  cardId     String? // Reference to the associated card
   lastActive String  @default("Gerade hinzugefügt")
   avatar     String? // Base64-encoded avatar image
   
   // Relationships
   user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
+  card       Card?   @relation("EmployeeCard", fields: [cardId], references: [id], onDelete: SetNull)
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

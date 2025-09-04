@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -40,6 +40,32 @@ export function EmployeeDialog({ open, onOpenChange, employee, onSuccess }: Empl
   });
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+
+  // Update form data when employee prop changes
+  useEffect(() => {
+    if (employee) {
+      setFormData({
+        name: employee.name || "",
+        position: employee.position || "",
+        email: employee.email || "",
+        phone: employee.phone || "",
+        department: employee.department || "",
+        status: employee.status || "Aktiv",
+        avatar: employee.avatar || ""
+      });
+    } else {
+      // Reset form for new employee
+      setFormData({
+        name: "",
+        position: "",
+        email: "",
+        phone: "",
+        department: "",
+        status: "Aktiv",
+        avatar: ""
+      });
+    }
+  }, [employee]);
 
   const handleInputChange = (field: keyof (EmployeeData & { avatar?: string }), value: string) => {
     setFormData(prev => ({

@@ -61,7 +61,7 @@ export function BusinessCard({ data, variant = "display", className = "" }: Busi
               <img 
                 src={data.companyLogo} 
                 alt={`${data.company} Logo`}
-                className="w-8 h-8 sm:w-12 sm:h-12 object-contain bg-white/10 rounded p-1"
+                className="w-20 h-20 sm:w-24 sm:h-24 object-contain bg-white/10 rounded p-2"
               />
             </div>
           )}

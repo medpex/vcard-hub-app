@@ -135,10 +135,13 @@ export default function CardEditor() {
         card = await createCard(formData, employeeId || undefined);
         setCurrentCardId(card.id);
         
-        // Update employee to mark they have a card
+        // Update employee to mark they have a card and link to the card
         if (employeeId) {
           try {
-            await updateEmployee(employeeId, { hasCard: true });
+            await updateEmployee(employeeId, { 
+              hasCard: true,
+              cardId: card.id 
+            });
           } catch (error) {
             console.error('Failed to update employee:', error);
           }

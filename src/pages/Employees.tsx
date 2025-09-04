@@ -94,10 +94,13 @@ export default function Employees() {
   };
 
   const handleEditCard = (employee: any) => {
-    // Navigate to card editor for existing card
-    // This would require getting the card ID associated with the employee
-    // For now, we'll create a new card with the employee data
-    navigate(`/cards?employee=${employee.id}&name=${encodeURIComponent(employee.name)}&email=${encodeURIComponent(employee.email)}&phone=${encodeURIComponent(employee.phone)}&position=${encodeURIComponent(employee.position)}`);
+    if (employee.card) {
+      // Navigate to card editor for existing card
+      navigate(`/cards?id=${employee.card.id}`);
+    } else {
+      // Create new card with employee data
+      navigate(`/cards?employee=${employee.id}&name=${encodeURIComponent(employee.name)}&email=${encodeURIComponent(employee.email)}&phone=${encodeURIComponent(employee.phone)}&position=${encodeURIComponent(employee.position)}`);
+    }
   };
 
   return (
@@ -159,7 +162,7 @@ export default function Employees() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {employees.filter(emp => emp.hasCard).length}
+              {employees.filter(emp => emp.card).length}
             </div>
             <p className="text-xs text-muted-foreground">
               Von {employees.length} Mitarbeitern
@@ -222,9 +225,20 @@ export default function Employees() {
                     <Badge variant={employee.status === "Aktiv" ? "default" : "secondary"}>
                       {employee.status}
                     </Badge>
-                    <Badge variant={employee.hasCard ? "default" : "outline"}>
-                      {employee.hasCard ? "Hat Visitenkarte" : "Keine Visitenkarte"}
+                    <Badge variant={employee.card ? "default" : "outline"}>
+                      {employee.card ? "Hat Visitenkarte" : "Keine Visitenkarte"}
                     </Badge>
+                    {!employee.card && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleCreateCard(employee)}
+                        className="h-6 px-2 text-xs"
+                      >
+                        <UserPlus className="w-3 h-3 mr-1" />
+                        Karte erstellen
+                      </Button>
+                    )}
                     <span className="text-xs text-muted-foreground">
                       {employee.lastActive}
                     </span>
@@ -241,7 +255,7 @@ export default function Employees() {
                           <Edit className="w-4 h-4 mr-2" />
                           Bearbeiten
                         </DropdownMenuItem>
-                        {employee.hasCard ? (
+                        {employee.card ? (
                           <DropdownMenuItem onClick={() => handleEditCard(employee)}>
                             <CreditCard className="w-4 h-4 mr-2" />
                             Visitenkarte bearbeiten

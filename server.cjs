@@ -118,6 +118,9 @@ app.get('/api/employees', async (req, res) => {
     await ensureUser();
     const employees = await prisma.employee.findMany({
       where: { userId: DEFAULT_USER_ID },
+      include: {
+        card: true
+      },
       orderBy: { updatedAt: 'desc' }
     });
     res.json(employees);
@@ -156,7 +159,10 @@ app.post('/api/employees', async (req, res) => {
 app.get('/api/employees/:id', async (req, res) => {
   try {
     const employee = await prisma.employee.findUnique({
-      where: { id: req.params.id }
+      where: { id: req.params.id },
+      include: {
+        card: true
+      }
     });
     res.json(employee);
   } catch (error) {

@@ -285,6 +285,7 @@ export function ImageCropper({ onImageCropped, currentImage, size = 200 }: Image
 
               <div className="flex gap-2">
                 <Button 
+                  type="button"
                   onClick={cropToCircle} 
                   disabled={isProcessing || !imageLoaded}
                   className="flex items-center gap-2"
@@ -293,6 +294,7 @@ export function ImageCropper({ onImageCropped, currentImage, size = 200 }: Image
                   {isProcessing ? "Bearbeite..." : "Zuschneiden"}
                 </Button>
                 <Button 
+                  type="button"
                   variant="outline" 
                   onClick={handleReset}
                   className="flex items-center gap-2"
@@ -320,7 +322,7 @@ export function ImageCropper({ onImageCropped, currentImage, size = 200 }: Image
             <p className="text-muted-foreground text-center mb-4">
               Klicken Sie hier oder ziehen Sie ein Bild hinein
             </p>
-            <Button>
+            <Button type="button">
               Bild auswählen
             </Button>
             <p className="text-xs text-muted-foreground mt-4 text-center">
