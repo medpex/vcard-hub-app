@@ -152,101 +152,32 @@ END:VCARD`;
             </Button>
           </div>
 
-          {/* Contact Details Card */}
-          <Card className="mx-4 sm:max-w-2xl sm:mx-auto">
-            <CardContent className="p-4 sm:p-6">
-              <div className="space-y-4 sm:space-y-6">
-                <div className="text-center border-b pb-4">
-                  <h1 className="text-xl sm:text-2xl font-bold text-business-text">{cardData.name}</h1>
-                  <p className="text-base sm:text-lg text-business-primary font-medium">{cardData.position}</p>
-                  <p className="text-sm sm:text-base text-muted-foreground">{cardData.company}</p>
-                </div>
-
-                <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
-                  {/* Email */}
-                  {cardData.email && (
-                    <a 
-                      href={`mailto:${cardData.email}`}
-                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors group touch-manipulation"
-                    >
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-business-primary/10 flex items-center justify-center group-hover:bg-business-primary/20 transition-colors flex-shrink-0">
-                        <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-business-primary" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="font-medium text-sm sm:text-base">E-Mail</p>
-                        <p className="text-xs sm:text-sm text-muted-foreground truncate">{cardData.email}</p>
-                      </div>
-                    </a>
-                  )}
-
-                  {/* Phone */}
-                  {cardData.phone && (
-                    <a 
-                      href={`tel:${cardData.phone}`}
-                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors group touch-manipulation"
-                    >
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-business-primary/10 flex items-center justify-center group-hover:bg-business-primary/20 transition-colors flex-shrink-0">
-                        <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-business-primary" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="font-medium text-sm sm:text-base">Telefon</p>
-                        <p className="text-xs sm:text-sm text-muted-foreground">{cardData.phone}</p>
-                      </div>
-                    </a>
-                  )}
-
-                  {/* Website */}
-                  {cardData.website && (
-                    <a 
-                      href={`https://${cardData.website}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors group touch-manipulation"
-                    >
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-business-primary/10 flex items-center justify-center group-hover:bg-business-primary/20 transition-colors flex-shrink-0">
-                        <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-business-primary" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="font-medium text-sm sm:text-base">Website</p>
-                        <p className="text-xs sm:text-sm text-muted-foreground truncate">{cardData.website}</p>
-                      </div>
-                    </a>
-                  )}
-
-                  {/* LinkedIn */}
-                  {cardData.linkedin && (
-                    <a 
-                      href={`https://${cardData.linkedin}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors group touch-manipulation"
-                    >
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-business-primary/10 flex items-center justify-center group-hover:bg-business-primary/20 transition-colors flex-shrink-0">
-                        <Linkedin className="w-4 h-4 sm:w-5 sm:h-5 text-business-primary" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="font-medium text-sm sm:text-base">LinkedIn</p>
-                        <p className="text-xs sm:text-sm text-muted-foreground truncate">{cardData.linkedin}</p>
-                      </div>
-                    </a>
-                  )}
-                </div>
-
-                {/* Address */}
-                {cardData.address && (
-                  <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/30">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-business-primary/10 flex items-center justify-center mt-0.5 flex-shrink-0">
+          {/* Quick Actions Card */}
+          {cardData.address && (
+            <Card className="mx-4 sm:max-w-2xl sm:mx-auto">
+              <CardContent className="p-4 sm:p-6">
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-center">Weitere Aktionen</h3>
+                  
+                  {/* Address with Google Maps Link */}
+                  <a 
+                    href={`https://maps.google.com/?q=${encodeURIComponent(cardData.address)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-start gap-3 p-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors group touch-manipulation"
+                  >
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-business-primary/10 flex items-center justify-center mt-0.5 flex-shrink-0 group-hover:bg-business-primary/20 transition-colors">
                       <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-business-primary" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="font-medium text-sm sm:text-base">Adresse</p>
+                      <p className="font-medium text-sm sm:text-base">📍 Standort auf Karte anzeigen</p>
                       <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{cardData.address}</p>
                     </div>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+                  </a>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Footer */}
           <div className="text-center text-xs sm:text-sm text-muted-foreground px-4">
